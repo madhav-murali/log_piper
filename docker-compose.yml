@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ml-api:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - HF_API_KEY=${HF_API_KEY}
+      - DATABASE_URL=sqlite:///./logs.db
+    volumes:
+      - ./data:/app/data
+
+  log-ingestor:
+    build:
+      context: ./cmd/ingestor
+      dockerfile: Dockerfile
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - WATCH_DIR=/app/logs
+      - ML_SERVICE_URL=http://ml-api:8000
+      - CHECK_INTERVAL=10s
+    depends_on:
+      - ml-api
+
+  # Optional: Simple dashboard
+  dashboard:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./dashboard:/usr/share/nginx/html
+    depends_on:
+      - ml-api

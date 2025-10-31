@@ -1,0 +1,1 @@
+HF SPACE : https://huggingface.co/spaces/TrinitySoul/embedding

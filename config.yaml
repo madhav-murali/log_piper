@@ -1,0 +1,17 @@
+model:
+  name: "all-MiniLM-L6-v2"
+  device: "cuda" #"cpu"  
+
+processing:
+  batch_size: 100
+  analysis_interval_seconds: 60
+  max_logs_in_memory: 1000
+
+clustering:
+  algorithm: "dbscan"
+  eps: 0.5
+  min_samples: 5
+
+files:
+  log_path: "./sample_logs/app.log"
+  watch_directory: "./sample_logs"

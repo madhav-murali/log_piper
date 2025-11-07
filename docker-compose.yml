@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222" # for monitoring
+    command: ["-js"]
+
+  log-generator:
+    build: ./cmd/log-generator
+    depends_on:
+      - nats
+
+  log-ingestor:
+    build: ./cmd/log-ingestor
+    depends_on:
+      - nats
